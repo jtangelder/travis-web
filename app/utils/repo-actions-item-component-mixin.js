@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import eventually from 'travis/utils/eventually';
 
 export default Ember.Mixin.create({
   restarting: false,
@@ -31,7 +32,12 @@ export default Ember.Mixin.create({
       onFinished = () => {
         this.set('restarting', false);
       };
-      return this.get('item').restart().then(onFinished, onFinished);
+      let restart = function(record) {
+        record.restart().then(onFinished, onFinished);
+      };
+      eventually(this.get('item'), (item) => {
+        item.restart();
+      });
     },
     cancel: function() {
       var type;
