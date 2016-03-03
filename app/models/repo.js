@@ -216,7 +216,7 @@ Repo.reopenClass({
       promise = new Ember.RSVP.Promise(function(resolve, reject) {
         return store.query('repo', {
           'repository.active': 'true',
-          limit: 20
+          limit: 30
         }).then(function() {
           return resolve(repos);
         }, function() {
