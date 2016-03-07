@@ -48,5 +48,9 @@ export default Ember.Service.extend({
 
   close(msg) {
     return this.get('flashes').removeObject(msg);
+  },
+
+  add(type, message) {
+    this.loadFlashes([ { [type]: message } ]);
   }
 });

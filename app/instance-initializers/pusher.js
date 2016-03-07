@@ -11,6 +11,7 @@ initialize = function(data) {
       instantiate: false
     });
     application.inject('route', 'pusher', 'pusher:main');
+    application.inject('component', 'pusher', 'pusher:main');
     return application.pusher.store = data.container.lookup('service:store');
   }
 };
