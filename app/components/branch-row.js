@@ -5,6 +5,8 @@ import config from 'travis/config/environment';
 
 export default Ember.Component.extend({
   routing: Ember.inject.service('-routing'),
+  permissions: Ember.inject.service(),
+
   tagName: 'li',
   classNameBindings: ['build.last_build.state'],
   classNames: ['branch-row', 'row-li'],
@@ -54,18 +56,8 @@ export default Ember.Component.extend({
   }.property(),
 
   canTrigger: function() {
-    var permissions;
-    if (!this.get('auth.signedIn')) {
-      return false;
-    } else {
-      permissions = this.get('auth.currentUser.permissions');
-      if (permissions.contains(parseInt(this.get('build.repository.id')))) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }.property(),
+    return this.get('permissions').hasPermission(this.get('build.repository'));
+  }.property('permissions.all', 'build.repository'),
 
   triggerBuild: function() {
     var apiEndpoint, options, repoId;

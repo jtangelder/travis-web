@@ -60,6 +60,8 @@ Object.defineProperty(Log.Limit.prototype, 'limited', {
 
 export default Ember.Component.extend({
   popup: Ember.inject.service(),
+  permissions: Ember.inject.service(),
+
   classNameBindings: ['logIsVisible:is-open'],
   logIsVisible: false,
   currentUserBinding: 'auth.currentUser',
@@ -190,11 +192,8 @@ export default Ember.Component.extend({
   }.property('job.log.id', 'job.log.token'),
 
   hasPermission: function() {
-    var permissions;
-    if (permissions = this.get('currentUser.permissions')) {
-      return permissions.contains(parseInt(this.get('job.repo.id')));
-    }
-  }.property('currentUser.permissions.length', 'job.repo.id'),
+    return this.get('permissions').hasPermission(this.get('job.repo'));
+  }.property('permissions.all', 'job.repo'),
 
   canRemoveLog: function() {
     var job;
